@@ -35,11 +35,14 @@ public class Client {
 
     private void senFiles(ArrayList<File> files) {
         String logMessage = "";
+        String errorMessage = "";
         Socket socket = null;
         for (File file : files) {
             try {
                 socket = new Socket(serverIpAddress, serverPort);
             } catch (IOException e) {
+                errorMessage = e.getMessage();
+                controller.sendMessage(errorMessage, "red");
                 e.printStackTrace();
             }
             try {
@@ -74,15 +77,14 @@ public class Client {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                errorMessage = e.getMessage();
+                controller.sendMessage(errorMessage, "red");
             }
 
 
         }
         logMessage = df.format(new Date()) + " Файлы успешно переданы!!!";
-        controller.sendMessage(logMessage,"green");
-
-
-
+        controller.sendMessage(logMessage, "green");
     }
 
 }
