@@ -7,15 +7,29 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
 public class Client {
     private Controller controller;
     private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-    private String serverIpAddress = "127.0.0.1";
-    private int serverPort = 4444;
 
     public Client() {
+    }
 
+    private String[] getProps(){
+        Properties prop = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("settings.properties");
+        try {
+            prop.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String serverIpAddress = prop.getProperty("server.ip.adders");
+        String serverPort = prop.getProperty("server.port");
+        String filesFolderPath = prop.getProperty("file.folderPath");
+
+        return new String[]{serverIpAddress, serverPort,filesFolderPath};
     }
 
     public Client(Controller controller) {
@@ -23,14 +37,20 @@ public class Client {
     }
 
     public void sendFile() {
-        File folder = new File("D:\\test");
+        File folder = new File(getProps()[2]);
         ArrayList<File> files = new ArrayList<File>();
-        for (File file : folder.listFiles()) {
-            if (file.isFile()) {
-                files.add(file);
+        File[] arrFiles = folder.listFiles();
+
+        if (arrFiles != null) {
+            for (File file : arrFiles) {
+                if (file.isFile()) {
+                    files.add(file);
+                }
             }
+            senFiles(files);
+        }else {
+            controller.sendMessage("В папці '" + folder.getPath() + "' файлів не знайдено!!!","green");
         }
-        senFiles(files);
     }
 
     private void senFiles(ArrayList<File> files) {
@@ -39,7 +59,7 @@ public class Client {
         Socket socket = null;
         for (File file : files) {
             try {
-                socket = new Socket(serverIpAddress, serverPort);
+                socket = new Socket(getProps()[0], Integer.parseInt(getProps()[1]));
             } catch (IOException e) {
                 errorMessage = e.getMessage();
                 controller.sendMessage(errorMessage, "red");
@@ -58,6 +78,7 @@ public class Client {
                 controller.sendLog(logMessage);
 
                 //write file names
+//                dos.writeLong(file.length());
                 dos.writeUTF(fileName);
 
                 //create new fileinputstream for each file
