@@ -1,8 +1,11 @@
 package sample.company;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 /**
  * Created with Intellij IDEA.
@@ -38,5 +41,52 @@ public class Utils {
         return divider;
     }
 
+    private String getProperties(String key) {
+        String result = "";
+        Properties prop = new Properties();
+        InputStream input = null;
 
+        try {
+
+            input = getClass().getClassLoader().getResourceAsStream("settings.properties");
+
+            // load a properties file
+            prop.load(input);
+            // get the property value and print it out
+
+            result = prop.getProperty(key);
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    public String getServerIpAddress(){
+        return getProperties("server.ip.adders");
+    }
+    public int getServerPort(){
+        return Integer.parseInt(getProperties("server.port"));
+    }
+
+    public String getArchivePath() {
+        return getProperties("file.archivePath");
+    }
+
+    public int getServerPort2() {
+        return Integer.parseInt(getProperties("server.port2"));
+    }
+
+    public String getFolderPath() {
+        return getProperties("file.folderPath");
+    }
 }

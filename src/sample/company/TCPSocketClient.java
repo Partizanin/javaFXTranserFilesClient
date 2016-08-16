@@ -42,8 +42,9 @@ public class TCPSocketClient {
         if (files.size() > 0) {
             while (!isConnected) {
                 try {
-                    sendLog(utils.getCurrentDateTime() + " Підключення до сервера " + "IP - localHost:4445");
-                    socket = new Socket("localHost", 4444);
+                    sendLog(utils.getCurrentDateTime() + " Підключення до сервера " + "IP - "
+                            + utils.getServerIpAddress() + utils.getServerPort());
+                    socket = new Socket(utils.getServerIpAddress(), utils.getServerPort());
                     sendLog(utils.getCurrentDateTime() + " Підключення встановлено\n");
                     isConnected = true;
                     outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -80,7 +81,7 @@ public class TCPSocketClient {
             try {
 
                 oldFilePath = new File(file.getPath());
-                File newFilePath = new File("D:\\ARMVZ_SL\\Obmen\\Export\\Archiv\\" + file.getName());
+                File newFilePath = new File(utils.getArchivePath() + file.getName());
 
                 inStream = new FileInputStream(oldFilePath);
                 outStream = new FileOutputStream(newFilePath);
@@ -111,8 +112,9 @@ public class TCPSocketClient {
     private void communicate2(File file) {
         Socket writeSocket = null;
         try {
-            sendLog(utils.getCurrentDateTime() + " Підключення до сервера " + "IP - localHost:4446");
-            writeSocket = new Socket("localhost", 4446);
+            sendLog(utils.getCurrentDateTime() + " Підключення до сервера " + "IP - " +
+            utils.getServerIpAddress() + utils.getServerPort2());
+            writeSocket = new Socket(utils.getServerIpAddress(), utils.getServerPort2());
             sendLog(utils.getCurrentDateTime() + " Підключення встановлено\n");
             DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(writeSocket.getOutputStream()));
             int n = 0;
@@ -200,7 +202,7 @@ public class TCPSocketClient {
     private ArrayList<File> readFiles() {
         ArrayList<File> listFiles = new ArrayList<File>();
 
-        File folder = new File("D:\\ARMVZ_SL\\Obmen\\Export");
+        File folder = new File(utils.getFolderPath());
         File[] arrFiles = folder.listFiles();
         if (arrFiles != null) {
             listFiles = fileFilter(arrFiles);
