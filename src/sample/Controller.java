@@ -1,13 +1,16 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import sample.company.Client;
+import sample.company.TCPSocketClient;
 
 public class Controller {
 
-    private Client client = new Client(this);
+    public Button clearButton;
+    private TCPSocketClient client = new TCPSocketClient(this);
 
     @FXML
     public TextArea messageArea;
@@ -29,7 +32,7 @@ public class Controller {
     }
 
     public void setSendButton() {
-        client.sendFile();
+        client.communicate();
     }
 
     public void sendMessage(String message, String color) {
@@ -39,6 +42,10 @@ public class Controller {
 
     public void sendLog(String log) {
         textArea.appendText(log + "\n");
+    }
+
+    public void clearTextArea(ActionEvent actionEvent) {
+        textArea.clear();
     }
 }
 
