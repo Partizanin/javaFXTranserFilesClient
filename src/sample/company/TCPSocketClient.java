@@ -43,7 +43,7 @@ public class TCPSocketClient {
             while (!isConnected) {
                 try {
                     sendLog(utils.getCurrentDateTime() + " Підключення до сервера " + "IP - localHost:4445");
-                    socket = new Socket("localHost", 4445);
+                    socket = new Socket("localHost", 4444);
                     sendLog(utils.getCurrentDateTime() + " Підключення встановлено\n");
                     isConnected = true;
                     outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -64,6 +64,8 @@ public class TCPSocketClient {
             }
 
             transferFileToArchive(files);
+        }else {
+            sendLog("Файлів не знайдено");
         }
     }
 
