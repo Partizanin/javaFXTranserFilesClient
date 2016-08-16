@@ -17,3 +17,4 @@ src/META-INF
 .idea/
 *.iml
 out/
+src/sample/todoList.txt

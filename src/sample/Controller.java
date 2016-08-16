@@ -37,6 +37,7 @@ public class Controller {
 
     public void sendMessage(String message, String color) {
         changeColor(color);
+        message = message.replaceAll("\t", "\\\\t");
         messageArea.appendText(message + "\n");
     }
 
