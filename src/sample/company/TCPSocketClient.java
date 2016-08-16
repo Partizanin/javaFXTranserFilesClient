@@ -113,7 +113,7 @@ public class TCPSocketClient {
         Socket writeSocket = null;
         try {
             sendLog(utils.getCurrentDateTime() + " Підключення до сервера " + "IP - " +
-            utils.getServerIpAddress() + utils.getServerPort2());
+            utils.getServerIpAddress()+ ":" + utils.getServerPort2());
             writeSocket = new Socket(utils.getServerIpAddress(), utils.getServerPort2());
             sendLog(utils.getCurrentDateTime() + " Підключення встановлено\n");
             DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(writeSocket.getOutputStream()));
@@ -189,6 +189,10 @@ public class TCPSocketClient {
                         " Знайдено файл " + allFile.getName() + " " + utils.readableFileSize(allFile.length()));
                 files.add(allFile);
             } else if (name.toLowerCase().matches(".*" + "SP*.dbf" + ".*")) {
+                sendLog(utils.getCurrentDateTime() +
+                        " Знайдено файл " + allFile.getName() + " " + utils.readableFileSize(allFile.length()));
+                files.add(allFile);
+            }else if (name.toLowerCase().matches(".*" + "BP*.dbf" + ".*")) {
                 sendLog(utils.getCurrentDateTime() +
                         " Знайдено файл " + allFile.getName() + " " + utils.readableFileSize(allFile.length()));
                 files.add(allFile);
